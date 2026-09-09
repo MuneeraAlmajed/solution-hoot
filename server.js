@@ -14,6 +14,7 @@ const isSignedIn = require('./middleware/isSignedIn');
 // Routers
 const authRouter = require('./routes/authRouter');
 const hootsRouter = require('./routes/hootsRouter');
+const commentsRouter = require('./routes/commentsRouter');
 
 app.use(cors());
 app.use(express.json());
@@ -28,6 +29,7 @@ app.use('/auth', authRouter);
 app.use(isSignedIn);
 
 app.use('/hoots', hootsRouter);
+app.use('/hoots/:hootId/comments', commentsRouter);
 
 app.get('/protected', (req, res) => {
   try {

@@ -20,4 +20,51 @@ const create = async (req, res) => {
   }
 };
 
-module.exports = { create };
+const index = async (req, res) => {
+  try {
+    const hoots = await Hoot.find().populate('author').sort({ createdAt: 'desc' });
+
+    res.status(200).json(hoots);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ err: error.message });
+  }
+};
+
+const show = async (req, res) => {
+  try {
+    const hoot = await Hoot.findById(req.params.id).populate('author');
+
+    res.status(200).json(hoot);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ err: error.message });
+  }
+};
+
+const update = async (req, res) => {
+  try {
+    const updatedHoot = await Hoot.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate(
+      'author',
+      'username'
+    );
+
+    res.status(200).json(updatedHoot);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ err: error.message });
+  }
+};
+
+const deleteHoot = async (req, res) => {
+  try {
+    await Hoot.findByIdAndDelete(req.params.id);
+
+    res.status(204).end();
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ err: error.message });
+  }
+};
+
+module.exports = { create, index, show, update, delete: deleteHoot };
